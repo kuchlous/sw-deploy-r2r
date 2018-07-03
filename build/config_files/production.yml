@@ -1,0 +1,80 @@
+upload:
+  base_dir: /home/spp_user/stories
+  file_name: upload_stories.csv
+image_upload:
+  base_dir: /home/spp_user/images
+  file_name: upload_images.csv
+illustration:
+  storage: fog
+  path: public_url
+
+logo:
+  storage: fog
+  path: public_url
+  
+donor_logo:
+  storage: fog
+  path: donor_logo_path
+
+profile_image:
+  storage: fog
+  path: public_url
+
+ckeditor_assets:
+  storage: fog
+  path: public_url
+
+blog_post_image:
+  storage: fog
+  path: blog_post_image_path
+
+banner_image:
+  storage: fog
+  path: banner_image_path
+
+category_banner:
+  storage: fog
+  path: category_banner_path
+
+category_home_image:
+  storage: fog
+  path: category_home_image_path
+
+fog:
+  host: https://storage.googleapis.com/sw-whitelabel
+  local_host: <%= ENV["HOST_IP"] %>/system/sw-whitelabel
+  directory: sw-whitelabel 
+  local_directory: system/sw-whitelabel
+  path: illustrations/:id/:style/:basename.:extension
+  logo_path: publishers/logos/:id/:style/:basename.:extension
+  donor_logo_path: donors/logos/:id/:style/:basename.:extension
+  profile_image_path: users/profile_images/:id/:style/:basename.:extension
+  blog_post_image_path: blog_posts/blog_post_image/:id/:style/:basename.:extension
+  crop_path: illustration_crops/:id/:style/:basename.:extension
+  ck_picture_path: ckeditor_assets/pictures/:id/:style/:basename.:extension
+  ck_attachment_path: ckeditor_assets/attachments/:id/:filename
+  banner_image_path: banners/banner_image/:id/:style/:basename.:extension
+  category_banner_path: categories/banners/:id/:style/:basename.:extension
+  category_home_image_path: categories/home_images/:id/:style/:basename.:extension
+
+varnam:
+  url: https://api.varnamproject.com/
+
+facebook:
+  app_id: <%= ENV["FACEBOOK_APP_ID"] %> 
+  secret_key: <%= ENV["FACEBOOK_SECRET_KEY"] %>
+
+google:
+  app_id: <%= ENV["GOOGLE_SIGNIN_APP_ID"] %>
+  secret_key: <%= ENV["GOOGLE_SECRET_KEY"] %>
+
+analytics:
+  tracking_id: <%= ENV["GA_PROPERTY_ID"] %>
+
+per_page:
+  entity_count: 24
+
+org_info:
+  prefix: "SW"
+  url: "https://storyweaver.org.in"
+
