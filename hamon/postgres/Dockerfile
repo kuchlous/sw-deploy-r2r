@@ -7,7 +7,8 @@ RUN apt-get update && apt-get -y -q install python-software-properties software-
 
 ARG user_name='spp_user'
 ARG user_pwd='grablempga'
-
+ENV HOST=172.17.0.1/24
+ENV USER=$user_name
 
 USER postgres
 RUN    /etc/init.d/postgresql start &&\
@@ -20,7 +21,6 @@ RUN    /etc/init.d/postgresql start &&\
     psql --command "GRANT ALL ON ALL TABLES IN SCHEMA public TO $user_name;"
   
 RUN sed -i "90i\local   all         $user_name                      trust" /etc/postgresql/9.3/main/pg_hba.conf
-RUN sed -i "88i\host    all      $user_name         172.17.0.1/24           md5" /etc/postgresql/9.3/main/pg_hba.conf
 
 EXPOSE 5432
 
@@ -28,6 +28,6 @@ EXPOSE 5432
 USER postgres
 RUN service postgresql restart
 
-COPY start.sh /tmp/
+ADD start.sh /tmp/
 CMD ["/bin/bash", "-l", "/tmp/start.sh"]
 
