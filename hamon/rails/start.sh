@@ -1,3 +1,4 @@
+sleep 15
 source /etc/profile.d/rvm.sh
 echo "In the new start file- Alok"
 
