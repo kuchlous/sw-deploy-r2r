@@ -1,34 +1,52 @@
 version: '3'
 services:
   sw-elasticsearch:
-       image: eks17:1
-       ports:
-         - 9200:9200
+    image: eks17:1
+    ports:
+      - 9200:9200
+    networks:
+      - sw-network
 
   sw-postgres:
-       image: pg17:2
-       ports:
-              - 5432:5432
-       environment:
-              - HOST=172.17.0.1/24 
+    image: pg17:2
+    ports:
+      - 5432:5432
+    environment:
+      - HOST=sw-app
+    networks:
+      - sw-network
+
   sw-couchbase:
-       image: couch17:1
-       ports:
-            - 8091-8096:8091-8096
+    image: couch17:1
+    ports:
+      - 8091-8096:8091-8096
+    networks:
+      - sw-network
+
   sw-nginx:
-      image: ng17:1
-      ports:
-           - 80:80
-      environment:
-          - HOST_IP=172.17.0.1
+    image: ng17:1
+    ports:
+      - 80:80
+    environment:
+      - HOST_IP=192.168.1.109
+    networks:
+      - sw-network
+    depends_on:
+      - "sw-app"
 
   sw-app:
-       image: railsapp:v0.1.1    
-       ports:
-            - 3000:3000
-       volumes:
-             - /home/suroor/sw-deploy-r2r-/deploy/setup_dir/:/shared
+    image: railsapp:v0.1.1
+    ports:
+      - 3000:3000
+    volumes:
+      - /home/suroor/sw-deploy-r2r-/deploy/setup_dir/:/shared
+    networks:
+      - sw-network
+    depends_on:
+      - "sw-postgres"
+      - "sw-elasticsearch"
+      - "sw-couchbase"
 
-       depends_on:
-            - "postgres"
-
+networks:
+  sw-network:
+    driver: overlay
