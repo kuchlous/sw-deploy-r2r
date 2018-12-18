@@ -1,14 +1,14 @@
 version: '3'
 services:
   sw-elasticsearch:
-    image: eks17:1
+    image: prathambooksdocker/eks17:1
     ports:
       - 9200:9200
     networks:
       - sw-network
 
   sw-postgres:
-    image: pg17:2
+    image: prathambooksdocker/pg17:2
     ports:
       - 5432:5432
     environment:
@@ -17,14 +17,14 @@ services:
       - sw-network
 
   sw-couchbase:
-    image: couch17:1
+    image: prathambooksdocker/couch17:1
     ports:
       - 8091-8096:8091-8096
     networks:
       - sw-network
 
   sw-nginx:
-    image: ng17:1
+    image: prathambooksdocker/ng17:1
     ports:
       - 80:80
     environment:
@@ -35,7 +35,7 @@ services:
       - "sw-app"
 
   sw-app:
-    image: railsapp:v0.1.1
+    image: prathambooksdocker/railsapp:v0.1.1
     ports:
       - 3000:3000
     volumes:
