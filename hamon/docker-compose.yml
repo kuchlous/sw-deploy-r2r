@@ -1,28 +1,28 @@
 version: '3'
 services:
-  elasticsearch:
+  sw-elasticsearch:
        image: eks17:1
        ports:
          - 9200:9200
 
-  postgres:
+  sw-postgres:
        image: pg17:2
        ports:
               - 5432:5432
        environment:
               - HOST=172.17.0.1/24 
-  couchbase:
+  sw-couchbase:
        image: couch17:1
        ports:
             - 8091-8096:8091-8096
-  nginx:
+  sw-nginx:
       image: ng17:1
       ports:
            - 80:80
       environment:
           - HOST_IP=172.17.0.1
 
-  web:
+  sw-app:
        image: railsapp:v0.1.1    
        ports:
             - 3000:3000
