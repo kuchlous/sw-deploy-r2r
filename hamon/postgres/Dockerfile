@@ -7,7 +7,7 @@ RUN apt-get update && apt-get -y -q install python-software-properties software-
 
 ARG user_name='spp_user'
 ARG user_pwd='grablempga'
-ENV HOST=172.17.0.1/24
+ENV HOST='sw-app'
 ENV USER=$user_name
 
 USER postgres
