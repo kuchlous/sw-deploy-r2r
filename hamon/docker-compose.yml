@@ -28,7 +28,7 @@ services:
     ports:
       - 80:80
     environment:
-      - HOST_IP=192.168.1.109
+      - HOST_IP=<ip_of_machine>
     networks:
       - sw-network
     depends_on:
@@ -39,7 +39,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - /home/suroor/sw-deploy-r2r-/deploy/setup_dir/:/shared
+      - <absolute_path_toshared_directory>:/shared
     networks:
       - sw-network
     depends_on:
