@@ -1,0 +1,55 @@
+* Deploy docker containers
+  - Create a linux server machine with atleast 4GB of RAM on any
+    provider(aws, digitalocean, etc..) and make sure that the port
+    '80' is open and accepting connections. (On aws, this can be
+    achieved by editing the instance's security group).
+  - ssh into the machine
+  - Install docker and docker-compose if not already available.
+    docker:
+    #+BEGIN_SRC shell-script
+      curl -fsSL https://get.docker.com -o get-docker.sh
+      sh get-docker.sh
+    #+END_SRC
+    docker-compose can be installed with the instructions here
+    https://docs.docker.com/compose/install/#install-compose
+    
+    Make sure of the install by running 
+    #+BEGIN_SRC shell-script
+      docker --version
+      docker-compose --version
+    #+END_SRC
+
+  - Clone the deployment repository and checkout to the 'hamon' branch
+    #+BEGIN_SRC shell-script
+      git clone https://github.com/kuchlous/sw-deploy-r2r.git
+      cd sw-deploy-r2r
+      git checkout hamon
+      cd hamon
+    #+END_SRC
+
+  - Create a directory named 'shared' and inside it create three more
+    directories named 'log', 'system' and 'tmp'.
+    #+BEGIN_SRC shell-script
+      mkdir shared
+      cd shared
+      mkdir log system tmp
+      # Go back to 'hamon' directory
+      cd ..
+    #+END_SRC
+
+  - Edit the 'docker-compose.yml' and replace
+    '<absolute_path_toshared_directory>' with the complete path to the
+    'shared' directory. Also replace '<ip_of_machine>' with the ip
+    address of the server.
+
+  - Run
+    #+BEGIN_SRC shell-script
+      docker swarm init
+      docker-compose up
+    #+END_SRC
+    Wait for sometime and then go to the ip address of the server with
+    your browser.
+
+
+
+    
