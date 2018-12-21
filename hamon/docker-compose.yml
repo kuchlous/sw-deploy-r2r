@@ -29,6 +29,7 @@ services:
     image: prathambooksdocker/ng17:1
     ports:
       - 80:80
+      - 443:443
     environment:
       - HOST_IP=<ip_of_machine>
     networks:
