@@ -4,11 +4,17 @@
     '80' is open and accepting connections. (On aws, this can be
     achieved by editing the instance's security group).
   - ssh into the machine
-  - Install docker and docker-compose if not already available.
+  - Install git, docker and docker-compose if not already available.
+  
     docker:
     #+BEGIN_SRC shell-script
       curl -fsSL https://get.docker.com -o get-docker.sh
       sh get-docker.sh
+    #+END_SRC
+    This will also install git. If you are not using this method, you can install git using 
+     #+BEGIN_SRC shell-script
+      sudo apt-get update 
+      sudo apt-get install git
     #+END_SRC
     docker-compose can be installed with the instructions here
     https://docs.docker.com/compose/install/#install-compose
