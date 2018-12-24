@@ -44,8 +44,8 @@
 
   - Run
     #+BEGIN_SRC shell-script
-      docker swarm init
-      docker-compose up
+      sudo docker swarm init
+      sudo docker-compose up
     #+END_SRC
     Wait for sometime and then go to the ip address of the server with
     your browser.
