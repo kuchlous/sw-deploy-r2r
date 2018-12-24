@@ -8,6 +8,10 @@ services:
       - discovery.type=single-node
     networks:
       - sw-network
+    deploy:
+      placement:
+        constraints:
+          - node.labels.elasticsearch == true
 
   sw-postgres:
     image: prathambooksdocker/pg17:2
@@ -17,6 +21,11 @@ services:
       - HOST=sw-app
     networks:
       - sw-network
+    deploy:
+      placement:
+        constraints:
+          - node.labels.postgres == true
+
 
   sw-couchbase:
     image: prathambooksdocker/couch17:1
@@ -24,6 +33,11 @@ services:
       - 8091-8096:8091-8096
     networks:
       - sw-network
+    deploy:
+      placement:
+        constraints:
+          - node.labels.couchbase == true
+
 
   sw-nginx:
     image: prathambooksdocker/ng17:1
@@ -36,6 +50,11 @@ services:
       - sw-network
     depends_on:
       - "sw-app"
+    deploy:
+      placement:
+        constraints:
+          - node.labels.nginx == true
+
 
   sw-app:
     image: prathambooksdocker/railsapp:v0.1.1
@@ -49,6 +68,11 @@ services:
       - "sw-postgres"
       - "sw-elasticsearch"
       - "sw-couchbase"
+    deploy:
+      placement:
+        constraints:
+          - node.labels.app == true
+
 
 networks:
   sw-network:
