@@ -12,6 +12,9 @@ ln -s /shared/system/ $RAILS_PATH/public/system
 ln -s /shared/tmp/ $RAILS_PATH/tmp
 ln -s /shared/log/ $RAILS_PATH/log 
 
+#Wait until postgres is up and accepting connections on port 5432
+while ! timeout 1 bash -c "echo > /dev/tcp/sw-postgres/5432"; do sleep 10; done
+
 RAILS_PATH=/workdir/spp
 
 cd $RAILS_PATH
