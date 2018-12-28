@@ -1,0 +1,7 @@
+USER=ubuntu
+SSH_KEY=/home/abu/hamon/current/storyweaver/suroor-devops.pem
+ELASTIC=34.243.187.133
+POSTGRES=34.251.19.45
+SW_APP=34.241.189.237
+COUCH=34.241.189.237
+NGINX=192.168.1.113
