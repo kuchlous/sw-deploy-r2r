@@ -21,4 +21,5 @@ done
 # Create shared directory in app host
 ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}"
 
-
+# Deploye
+sudo docker stack deploy -c docker-compose.yml story
