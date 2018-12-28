@@ -45,7 +45,7 @@ services:
       - 80:80
       - 443:443
     environment:
-      - HOST_IP=<ip_of_machine>
+      - HOST_IP=${NGINX}
     networks:
       - sw-network
     depends_on:
@@ -61,7 +61,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - <absolute_path_toshared_directory>:/shared
+      - ${SHARED_DIR}:/shared
     networks:
       - sw-network
     depends_on:
