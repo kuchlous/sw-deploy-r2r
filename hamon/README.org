@@ -1,10 +1,15 @@
 * Deploy docker containers
-  - Create a linux server machine with atleast 4GB of RAM on any
-    provider(aws, digitalocean, etc..) and make sure that the port
-    '80' is open and accepting connections. (On aws, this can be
-    achieved by editing the instance's security group).
-  - ssh into the machine
-  - Install git, docker and docker-compose if not already available.
+  - Create ubuntu server machines (One server per each of the 5
+    services is recommended, though multiple services can be run on
+    same machine. Atleast 4GB of RAM is recommended for running
+    elasticsearch) on any provider(aws, digitalocean, etc..)
+  - Open ports TCP 2377, TCP and UDP 7946 and UDP 4789 on all
+    machines. These ports used by docker to communicate between
+    nodes. Make sure that the port '80' and '443'(for https) is open
+    and accepting connections on the machine intended to run
+    'nginx'. (On aws, opening ports can be managed by editing the
+    instance's security group).
+  - Install git and docker on all machines if not already available.
   
     docker:
     #+BEGIN_SRC shell-script
@@ -16,16 +21,14 @@
       sudo apt-get update 
       sudo apt-get install git
     #+END_SRC
-    docker-compose can be installed with the instructions here
-    https://docs.docker.com/compose/install/#install-compose
-    
     Make sure of the install by running 
     #+BEGIN_SRC shell-script
       docker --version
-      docker-compose --version
+      git --version
     #+END_SRC
-
-  - Clone the deployment repository and checkout to the 'hamon' branch
+  - ssh into the machine where nginx should be run. This node will be
+    used as the docker swarm manager. Let's call this the 'nginx server'
+  - Clone the deployment repository and checkout to the 'hamon_multiple_host' branch
     #+BEGIN_SRC shell-script
       git clone https://github.com/kuchlous/sw-deploy-r2r.git
       cd sw-deploy-r2r
@@ -33,29 +36,35 @@
       cd hamon
     #+END_SRC
 
-  - Create a directory named 'shared' and inside it create three more
-    directories named 'log', 'system' and 'tmp'.
-    #+BEGIN_SRC shell-script
-      mkdir shared
-      cd shared
-      mkdir log system tmp
-      # Go back to 'hamon' directory
-      cd ..
-    #+END_SRC
+  - Copy the ssh key that can used to connect to all the machines to
+    nginx server
 
-  - Edit the 'docker-compose.yml' and replace
-    '<absolute_path_toshared_directory>' with the complete path to the
-    'shared' directory. Also replace '<ip_of_machine>' with the ip
-    address of the server.
+  - Edit the 'config' file and set appropriate values.
+
+    'USER' is the username which will be used to ssh into the machines
+    (The default user for all ubuntu machines in aws is 'ubuntu').
+
+    'SSH_KEY' is the path to the ssh key mentioned above.
+
+    'SHARED_DIR' is the path to a directory which will be used by the
+    rails application. It wil be automatically created on the machine
+    which runs the rails application.
+
+    The names of the services should be set to the IP addresses of the
+    instances which should run them. If multiple services are supposed
+    to run the same machine, the same IP address can be set as the
+    value for those services.(For example if elasticsearch should be
+    on 192.168.1.1 and nginx and rails should be on 192.168.1.2, then
+    these values in the config would look like
+    #+BEGIN_SRC shell-script
+      ELASTIC=192.168.1.1
+      SW_APP=192.168.1.2
+      NGINX=192.168.1.2
+    #+END_SRC
 
   - Run
     #+BEGIN_SRC shell-script
-      sudo docker swarm init
-      sudo docker-compose up
+      bash deploy.sh
     #+END_SRC
-    Wait for sometime and then go to the ip address of the server with
+    Wait for sometime and then go to the ip address of nginx server with
     your browser.
-
-
-
-    
