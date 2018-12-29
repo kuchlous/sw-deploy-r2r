@@ -19,7 +19,7 @@ for ((index=0;index<4;++index)); do
 done
 
 # Create shared directory in app host
-ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}"
+ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}log ${SHARED_DIR}system ${SHARED_DIR}tmp"
 
-# Deploye
+# Deploy
 sudo docker stack deploy -c docker-compose.yml story
