@@ -57,7 +57,7 @@ services:
 
 
   sw-app:
-    image: prathambooksdocker/railsapp:v0.1.1
+    image: prathambooksdocker/railsapp:v0.1.2
     ports:
       - 3000:3000
     volumes:
