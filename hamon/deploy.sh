@@ -9,7 +9,7 @@ sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
 sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
-labels=("elastic=true" "postgres=true" "sw_app=true" "couch=true")
+labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
 
 sudo docker swarm init
 
