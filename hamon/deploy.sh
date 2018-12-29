@@ -1,5 +1,13 @@
 #!/bin/bash
 source config
+
+# Set variables in docker-compose.yml.  This is ssort of a hack. Need
+# to find out why docker stack deploy doesn't substitute env vars
+# properly and fix. If it is not supported, then below method can be
+# used.
+sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
+sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
+
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 labels=("elastic=true" "postgres=true" "sw_app=true" "couch=true")
 
