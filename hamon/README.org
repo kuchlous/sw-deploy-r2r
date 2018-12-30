@@ -32,7 +32,7 @@
     #+BEGIN_SRC shell-script
       git clone https://github.com/kuchlous/sw-deploy-r2r.git
       cd sw-deploy-r2r
-      git checkout hamon
+      git checkout hamon_multiple_host
       cd hamon
     #+END_SRC
 
