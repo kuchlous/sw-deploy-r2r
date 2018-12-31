@@ -26,7 +26,7 @@ echo "LOG: join commad is ${join_command}"
 # Add all other machines as swarm workers and assign appropriate labels 
 for ((index=0;index<4;++index)); do
     return_code=123
-    
+    try_count=1
     while [ $return_code -ne 0 ]
     do
         echo "LOG: Going to ssh to ${nodes[$index]} and set it as a worker"
@@ -34,7 +34,14 @@ for ((index=0;index<4;++index)); do
         return_code=$?
 	echo "LOG: Return code is $return_code"
         if [ $return_code -ne 0 ]; then
+            (( ++try_count ))
             echo "WARNING: Some thing going wrong with ${nodes[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
+        fi
+
+        if [ $try_count -gt 3]; then
+            echo "WARNING: Tried 3 times to connect with ${nodes[$index]}; SO going to STOP all process"
+            echo "make sure all hosts are configured correctly and try again"
+            exit 1
         fi
     done
     
