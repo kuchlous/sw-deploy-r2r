@@ -27,13 +27,15 @@ echo "LOG: join commad is ${join_command}"
 for ((index=0;index<4;++index)); do
     return_code=123
     
-    while $retun_code!=0
+    while [ $return_code -ne 0 ]
     do
         echo "LOG: Going to ssh to ${nodes[$index]} and set it as a worker"
         ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$index]} ${join_command}
         return_code=$?
+	echo "LOG: Return code is $return_code"
         if [ $return_code -ne 0 ]; then
             echo "WARNING: Some thing going wrong with ${nodes[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
+        fi
     done
     
     echo "LOG: ${node[$index]} joined to cluster as worker"
