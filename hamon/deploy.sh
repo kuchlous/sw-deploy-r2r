@@ -38,9 +38,14 @@ for ((index=0;index<4;++index)); do
             echo "WARNING: Some thing going wrong with ${nodes[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
         fi
 
-        if [ $try_count -gt 2 ]; then
+        if [ $try_count -gt 3 ]; then
             echo "WARNING: Tried 3 times to connect with ${nodes[$index]}; SO going to STOP all process"
             echo "make sure all hosts are configured correctly and try again"
+	    leave_command="sudo docker swarm leave -f"
+	    for ((i=0;i<index;++i));do
+		   ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$index]} ${leave_command}
+	    done
+	    sudo docker swarm leave -f
             exit 1
         fi
     done
