@@ -25,9 +25,17 @@ echo "LOG: join commad is ${join_command}"
 
 # Add all other machines as swarm workers and assign appropriate labels 
 for ((index=0;index<4;++index)); do
-
-    echo "LOG: Going to ssh to ${nodes[$index]} and set it as a worker"
-    ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$index]} ${join_command}
+    return_code=123
+    
+    while $retun_code!=0
+    do
+        echo "LOG: Going to ssh to ${nodes[$index]} and set it as a worker"
+        ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$index]} ${join_command}
+        return_code=$?
+        if [ $return_code -ne 0 ]; then
+            echo "WARNING: Some thing going wrong with ${nodes[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
+    done
+    
     echo "LOG: ${node[$index]} joined to cluster as worker"
      
     echo "LOG: Going to label ${node[$index]} as ${labels[$index]}"
