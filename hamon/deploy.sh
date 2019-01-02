@@ -11,7 +11,7 @@ sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
 
-sudo docker swarm init
+sudo docker swarm init --advertise-addr ${NGINX}
 echo "LOG: ${NGINX} This system initiated swarm cluster and role as master"
 
 # label current node as nginx
