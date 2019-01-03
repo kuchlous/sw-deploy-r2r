@@ -62,9 +62,21 @@ for((index=0;index<$host_count;++index));do
     
     echo "LOG: ${host[$index]} joined to cluster as worker"
      
-    echo "LOG: Going to label ${node[$index]} as ${labels[$index]}"
-    sudo docker node  update --label-add ${labels[$index]} $(ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$index]} hostname)
-    echo "LOG: ${node[$index]} node labeled as ${labels[$index]}"
+done
+
+# Label all nodes 
+for((indx=0;indx<4;++indx)); do 
+    echo "LOG: Going to label ${nodes[$indx]} as ${labels[$indx]}"
+    
+    sudo docker node  update --label-add ${labels[$indx]} $(ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$indx]} hostname)
+    rc=$?    
+	echo "LOG: Label Return code is $rc"
+
+    if [ $rc == 0 ]; then
+        echo "LOG: ${node[$indx]} node labeled as ${labels[$indx]}"
+    else
+        echo "LOG: ${node[$indx]} node NOT labeled Successfully"
+    fi
 done
 
 # Create shared directory in app host
