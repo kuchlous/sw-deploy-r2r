@@ -60,7 +60,7 @@ for((index=0;index<$host_count;++index));do
         fi
     done
     
-    echo "LOG: ${node[$index]} joined to cluster as worker"
+    echo "LOG: ${host[$index]} joined to cluster as worker"
      
     echo "LOG: Going to label ${node[$index]} as ${labels[$index]}"
     sudo docker node  update --label-add ${labels[$index]} $(ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$index]} hostname)
