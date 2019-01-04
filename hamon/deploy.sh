@@ -24,7 +24,7 @@ echo "LOG: Labeled master node  as nginx=true"
 
 # Get the token to join the swarm as worker and construct the joining command
 # This will be run in all the other machines 
-join_command="sudo docker swarm join --token $(sudo docker swarm join-token --quiet worker) ${NGINX}:2377"
+join_token=$(sudo docker swarm join-token --quiet worker)
 echo "LOG: join commad is ${join_command}"
 
 # Add each unique host to swarm
@@ -35,6 +35,7 @@ for((index=0;index<$host_count;++index));do
     while [ $return_code -ne 0 ]
     do
         echo "LOG: Going to ssh to $host and set it as a worker"
+        join_command="sudo docker swarm join --token $join_token --advertise-addr ${hosts[$index]} ${NGINX}:2377"
         ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$index]} ${join_command}
         return_code=$?
         
