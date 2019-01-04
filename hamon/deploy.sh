@@ -9,13 +9,16 @@ sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
 sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
+echo "LOG: Nodes are ${nodes[@]}"
 
 # Remove duplicate host ips 
 hosts=($(echo "${nodes[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+echo "LOG: Hosts are ${hosts[@]}"
 
 labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
 
 sudo docker swarm init --advertise-addr ${NGINX}
+    
 echo "LOG: ${NGINX} This system initiated swarm cluster and role as master"
 
 # label current node as nginx
@@ -29,6 +32,8 @@ echo "LOG: join commad is ${join_command}"
 
 # Add each unique host to swarm
 host_count=${#hosts[@]}
+echo "LOG: ${host_count} hosts to join"
+
 for((index=0;index<$host_count;++index));do
     return_code=123
     try_count=1
@@ -38,7 +43,6 @@ for((index=0;index<$host_count;++index));do
         join_command="sudo docker swarm join --token $join_token --advertise-addr ${hosts[$index]} ${NGINX}:2377"
         ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$index]} ${join_command}
         return_code=$?
-        
 	    echo "LOG: Return code is $return_code"
 
         if [ $return_code -ne 0 ]; then
@@ -55,6 +59,7 @@ for((index=0;index<$host_count;++index));do
 	           for ((i=$index;i>=0;++i));do
 		          ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
 	           done
+               
 	           sudo docker swarm leave -f
                exit 1
             fi
