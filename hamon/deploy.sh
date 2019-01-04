@@ -56,7 +56,7 @@ for((index=0;index<$host_count;++index));do
 	           leave_command="sudo docker swarm leave -f"
 
                # Leave all joined nodes
-	           for ((i=$index;i>=0;++i));do
+	           for ((i=$index;i>=0;--i));do
 		          ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
 	           done
                
