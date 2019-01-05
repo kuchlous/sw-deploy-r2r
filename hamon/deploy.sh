@@ -51,19 +51,57 @@ for((index=0;index<$host_count;++index));do
 
             # if it brake 3 times going to rollback  
             if [ $try_count -gt 3 ]; then
-               echo "WARNING: Tried 3 times to connect with ${hosts[$index]}; SO going to rollback all process"
-               echo "make sure all hosts are configured correctly and try again"
-	           leave_command="sudo docker swarm leave -f"
+               repeat=0
+               echo "WARNING: Tried 3 times to connect with ${hosts[$index]}"
+               while [ $repeat = 0]
+               do 
+                   echo "====================================================="
+                   echo "Select the Recovery options:"
+                   echo "Enter 1 for Check port and ssh issue of ${hosts[$index]} manually and try again "
+                   echo "Enter 2 for Run join command manualy in ${hosts[$index]}" 
+                   echo "Enter 3 for Change host"
+                   echo -e "\n"
+                   echo -e "Select your option:"
+                   read answer
+                   
+                   case $answer in
+                       1) echo "Pls Check the port issue and ssh issue with ${hosts[$index]}"
+                          echo "Enter c after fix OR ch for change option"
+                          read continue
 
-               # Leave all joined nodes
-	           for ((i=$index;i>=0;--i));do
-		          ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
-	           done
-               
-	           sudo docker swarm leave -f
-               exit 1
-            fi
-        fi
+                          case $continue in
+                              c) (( --index ))
+                                 repeat=1 
+                          esac
+
+                       2) echo "----------------------------------------------------"
+                          echo -e "\n"
+                          echo $join_command
+                          echo -e "\n"
+                          echo "Run this command on ${hosts[$index]}"
+                          echo "Make sure its return Node join as worker message"
+
+                          echo "Enter c if joined Successfully OR ch for change option"
+                          read continue
+
+                          case $continue in
+                              c) repeat=1 
+                          esac
+
+                       3) echo "Going Roll back"
+                      
+                          # Leave all joined nodes
+	                      leave_command="sudo docker swarm leave -f"
+	                      for ((i=$index;i>=0;--i));do
+		                      ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
+	                      done
+	                      sudo docker swarm leave -f
+                          exit 1
+                          
+                     esac
+                  done
+             fi
+         fi
     done
     
     echo "LOG: ${host[$index]} joined to cluster as worker"
