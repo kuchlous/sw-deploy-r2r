@@ -131,5 +131,5 @@ echo "LOG: Created ${SHARED_DIR} in ${SW_APP} "
 
 # Deploy
 echo "LOG: Going to DEPLOY........wait a while"
-#sudo docker stack deploy -c docker-compose.yml story
+sudo docker stack deploy -c docker-compose.yml story
 echo "LOG: Go to the ${NGINX} with your browser "
