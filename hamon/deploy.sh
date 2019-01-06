@@ -28,18 +28,18 @@ echo "LOG: Labeled master node  as nginx=true"
 # Get the token to join the swarm as worker and construct the joining command
 # This will be run in all the other machines 
 join_token=$(sudo docker swarm join-token --quiet worker)
-echo "LOG: join commad is ${join_command}"
 
 # Add each unique host to swarm
 host_count=${#hosts[@]}
 echo "LOG: ${host_count} hosts to join"
 
 for((index=0;index<$host_count;++index));do
+    echo"Ist index is $index"
     return_code=123
     try_count=1
     while [ $return_code -ne 0 ]
     do
-        echo "LOG: Going to ssh to $host and set it as a worker"
+        echo "LOG: Going to ssh to ${hosts[$index]} and set it as a worker"
         join_command="sudo docker swarm join --token $join_token --advertise-addr ${hosts[$index]} ${NGINX}:2377"
         ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$index]} ${join_command}
         return_code=$?
@@ -53,14 +53,14 @@ for((index=0;index<$host_count;++index));do
             if [ $try_count -gt 3 ]; then
                repeat=0
                echo "WARNING: Tried 3 times to connect with ${hosts[$index]}"
-               while [ $repeat = 0]
+               while [ $repeat = 0 ]
                do 
                    echo "====================================================="
                    echo "Select the Recovery options:"
                    echo "Enter 1 for Check port and ssh issue of ${hosts[$index]} manually and try again "
                    echo "Enter 2 for Run join command manualy in ${hosts[$index]}" 
                    echo "Enter 3 for Change host"
-                   echo -e "\n"
+                   #echo -e "\n"
                    echo -e "Select your option:"
                    read answer
                    
@@ -70,9 +70,12 @@ for((index=0;index<$host_count;++index));do
                           read continue
 
                           case $continue in
-                              c) (( --index ))
+                              c) echo "current insec is $index"
+				 (( --index ))
+				 echo "After decre $index"
+				 try_count=1
                                  repeat=1 
-                          esac
+                          esac;;
 
                        2) echo "----------------------------------------------------"
                           echo -e "\n"
@@ -86,16 +89,16 @@ for((index=0;index<$host_count;++index));do
 
                           case $continue in
                               c) repeat=1 
-                          esac
+                          esac;;
 
                        3) echo "Going Roll back"
                       
                           # Leave all joined nodes
-	                      leave_command="sudo docker swarm leave -f"
-	                      for ((i=$index;i>=0;--i));do
-		                      ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
-	                      done
-	                      sudo docker swarm leave -f
+	                  leave_command="sudo docker swarm leave -f"
+	                  for ((i=$index;i>=0;--i));do
+		              ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
+	                  done
+	                  sudo docker swarm leave -f
                           exit 1
                           
                      esac
@@ -130,5 +133,5 @@ echo "LOG: Created ${SHARED_DIR} in ${SW_APP} "
 
 # Deploy
 echo "LOG: Going to DEPLOY........wait a while"
-sudo docker stack deploy -c docker-compose.yml story
+#sudo docker stack deploy -c docker-compose.yml story
 echo "LOG: Go to the ${NGINX} with your browser "
