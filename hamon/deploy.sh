@@ -84,7 +84,9 @@ for((index=0;index<$host_count;++index));do
                           read continue
 
                           case $continue in
-                              c) repeat=1 
+                              c) repeat=1
+                                 try_count=1
+                                 return_code=0
                           esac;;
 
                        3) echo "Going Roll back"
