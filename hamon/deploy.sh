@@ -35,7 +35,6 @@ host_count=${#hosts[@]}
 echo "LOG: ${host_count} hosts to join"
 
 for((index=0;index<$host_count;++index));do
-    echo"Ist index is $index"
     return_code=123
     try_count=1
     while [ $return_code -ne 0 ]
@@ -49,7 +48,7 @@ for((index=0;index<$host_count;++index));do
             (( ++try_count ))
             echo "WARNING: Some thing going wrong with ${hosts[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
 
-            # if it brake 3 times going to rollback  
+            # if it brake 3 times going to debug 
             if [ $try_count -gt 3 ]; then
                repeat=0
                echo "WARNING: Tried 3 times to connect with ${hosts[$index]}"
@@ -70,10 +69,7 @@ for((index=0;index<$host_count;++index));do
                           read continue
 
                           case $continue in
-                              c) echo "current insec is $index"
-				 (( --index ))
-				 echo "After decre $index"
-				 try_count=1
+                              c) try_count=1
                                  repeat=1 
                           esac;;
 
@@ -94,11 +90,11 @@ for((index=0;index<$host_count;++index));do
                        3) echo "Going Roll back"
                       
                           # Leave all joined nodes
-	                  leave_command="sudo docker swarm leave -f"
-	                  for ((i=$index;i>=0;--i));do
-		              ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
-	                  done
-	                  sudo docker swarm leave -f
+	                      leave_command="sudo docker swarm leave -f"
+	                      for ((i=$index;i>=0;--i));do
+		                      ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$i]} ${leave_command}
+	                      done
+	                      sudo docker swarm leave -f
                           exit 1
                           
                      esac
