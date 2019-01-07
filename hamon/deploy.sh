@@ -18,9 +18,15 @@ echo "LOG: Hosts are ${hosts[@]}"
 labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
 
 sudo docker swarm init --advertise-addr ${NGINX}
-    
-echo "LOG: ${NGINX} This system initiated swarm cluster and role as master"
+return_code=$?
+if [[ return_code -ne 0 ]];then
+    echo "WARNING: This host is already part of swarm. Please leave,"
+    echo "to leave run the following command on that host"
+    echo "    sudo docker swarm leave -f    "
+    exit 1 
 
+echo "LOG: This host set as swarm master"
+          
 # label current node as nginx
 sudo docker node update --label-add "nginx=true" $(hostname)
 echo "LOG: Labeled master node  as nginx=true"
