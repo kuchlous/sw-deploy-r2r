@@ -40,7 +40,7 @@ for((index=0;index<$host_count;++index));do
     while [ $return_code -ne 0 ]
     do
         echo "LOG: Going to ssh to ${hosts[$index]} and set it as a worker"
-        ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$index]} ${join_command}
+        return_msg=$(ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$index]} ${join_command} 2>$1)
         return_code=$?
 	    echo "LOG: Return code is $return_code"
 
