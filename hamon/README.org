@@ -14,18 +14,35 @@
     On google cloud platform, the necessary firewall rules need to be
     created and assigned to the instances. See [[https://cloud.google.com/vpc/docs/using-firewalls][here]].
 
+  - Install git and docker on all machines. docker version needs to be
+    18.09.1-rc1 or greater.
   
     docker:
+
+    If docker is not already installed then:
     #+BEGIN_SRC shell-script
       curl -fsSL https://get.docker.com -o get-docker.sh
-      sh get-docker.sh
+      CHANNEL="test" sh get-docker.sh
     #+END_SRC
     This will also install git. If you are not using this method, you can install git using 
      #+BEGIN_SRC shell-script
       sudo apt-get update 
       sudo apt-get install git
     #+END_SRC
-    Make sure of the install by running 
+
+    If docker is already installed and is running a lower version,
+    then do the following to update
+    #+BEGIN_SRC shell-script
+      # Uninstall current version
+      sudo apt-get purge docker*
+
+      # Install latest version
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic test"
+      sudo apt update
+      sudo apt install docker-ce
+    #+END_SRC
+    Make sure of the install by running
     #+BEGIN_SRC shell-script
       docker --version
       git --version
