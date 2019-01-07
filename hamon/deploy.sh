@@ -48,8 +48,6 @@ for((index=0;index<$host_count;++index));do
             (( ++try_count ))
             echo "WARNING: Some thing going wrong with ${hosts[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
 
-            # if it brake 3 times going to debug 
-            if [ $try_count -gt 3 ]; then
                repeat=0
                echo "WARNING: Tried 3 times to connect with ${hosts[$index]}"
                while [ $repeat = 0 ]
@@ -101,7 +99,7 @@ for((index=0;index<$host_count;++index));do
                           
                      esac
                   done
-             fi
+          
          fi
     done
     
