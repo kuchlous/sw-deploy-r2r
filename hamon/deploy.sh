@@ -9,6 +9,13 @@ echo "Starting deployment" > $LOG_FILE
 sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
 sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 
+# Check whether the key is present in given path
+ls $SSH_KEY
+return_code=$?
+if [[ $return_code -ne 0 ]];then
+    echo "WARNING: No SSH key present in given path, pls confirm and start deploy again"
+    exit 1 
+
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 echo "LOG: Nodes are ${nodes[@]}" >> $LOG_FILE 
 
