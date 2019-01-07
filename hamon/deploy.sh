@@ -1,7 +1,7 @@
 #!/bin/bash
 source config
 LOG_FILE=deploy.log
-echo "Starting deployment" > $$LOG_FILE 
+echo "Starting deployment" > $LOG_FILE 
 # Set variables in docker-compose.yml.  This is ssort of a hack. Need
 # to find out why docker stack deploy doesn't substitute env vars
 # properly and fix. If it is not supported, then below method can be
