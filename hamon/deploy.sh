@@ -26,7 +26,7 @@ if [[ return_code -ne 0 ]];then
     echo "    sudo docker swarm leave -f    "  | tee -a $LOG_FILE
     echo "Stopping deployment" >> $LOG_FILE
     exit 1 
-
+fi
 echo "LOG: This host set as swarm master" | tee -a $LOG_FILE 
           
 # label current node as nginx
