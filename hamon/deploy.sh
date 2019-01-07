@@ -15,6 +15,7 @@ return_code=$?
 if [[ $return_code -ne 0 ]];then
     echo "WARNING: No SSH key present in given path, pls confirm and start deploy again" | tee -a $LOG_FILE  
     exit 1 
+fi
 
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 echo "LOG: Nodes are ${nodes[@]}" >> $LOG_FILE 
