@@ -45,20 +45,37 @@ for((index=0;index<$host_count;++index));do
 	    echo "LOG: Return code is $return_code"
 
         if [ $return_code -ne 0 ]; then
-            (( ++try_count ))
-            echo "WARNING: Some thing going wrong with ${hosts[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
-
+               echo "WARNING: Some thing going wrong with ${hosts[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
+            
                repeat=0
                echo "WARNING: Tried 3 times to connect with ${hosts[$index]}"
                while [ $repeat = 0 ]
-               do 
+               do
+                   if [[ "$return_msg" =~ "This node is already part of a swarm" ]]; then
+                       echo "${hosts[$index]} is already part of a swarm. Please leave"
+                       echo "the current swarm to use this host.To leave, run the following"
+                       echo "command on that host"
+                       echo "    sudo docker swarm leave -f    "
+                   fi
+
+                   if [[ "$return_msg" =~ "Timeout was reached before node joined" ]]; then
+                       echo "${hosts[$index]} Cannot communicate with swarm manager ($NGINX).Please"
+                       echo "ensure that $NGINX is configured to allow incomming traffic through "
+                       echo "PORT 2377. Also make sure that ports 7946 and 4789 are also configured properly"
+                   fi
+
+                   if [[ $return_code = 255 ]];then
+                       echo "Cannot ssh to ${hosts[$index]}"
+                   fi
+                   
                    echo "====================================================="
-                   echo "Select the Recovery options:"
-                   echo "Enter 1 for Check port and ssh issue of ${hosts[$index]} manually and try again "
-                   echo "Enter 2 for Run join command manualy in ${hosts[$index]}" 
-                   echo "Enter 3 for Change host"
-                   #echo -e "\n"
-                   echo -e "Select your option:"
+                   echo "Select continue after the problemm is fixed, to continue the deployment or "
+                   echo "select quit to stop the process (Note that selecting 'quit' will rollback the network created by the script)"
+
+                   echo "1) Problem fixed,  contnue "
+                   echo "2) Quit"
+                   
+                   echo -e "Choose 1 or 2 :"
                    read answer
                    
                    case $answer in
@@ -71,23 +88,8 @@ for((index=0;index<$host_count;++index));do
                                  repeat=1 
                           esac;;
 
-                       2) echo "----------------------------------------------------"
-                          echo -e "\n"
-                          echo $join_command
-                          echo -e "\n"
-                          echo "Run this command on ${hosts[$index]}"
-                          echo "Make sure its return Node join as worker message"
-
-                          echo "Enter c if joined Successfully OR ch for change option"
-                          read continue
-
-                          case $continue in
-                              c) repeat=1
-                                 try_count=1
-                                 return_code=0
-                          esac;;
-
-                       3) echo "Going Roll back"
+                   
+                       2) echo "Going Roll back"
                       
                           # Leave all joined nodes
 	                      leave_command="sudo docker swarm leave -f"
