@@ -21,7 +21,7 @@ sudo docker swarm init --advertise-addr ${NGINX}
 return_code=$?
 if [[ return_code -ne 0 ]];then
     echo "WARNING: This host is already part of swarm. Please leave,"
-    echo "to leave run the following command on that host"
+    echo "to leave run the following command on this host, and run bash deploy.sh again"
     echo "    sudo docker swarm leave -f    "
     exit 1 
 
@@ -51,10 +51,8 @@ for((index=0;index<$host_count;++index));do
 	    echo "LOG: Return code is $return_code"
 
         if [ $return_code -ne 0 ]; then
-               echo "WARNING: Some thing going wrong with ${hosts[$index]} Pls confirm the host is runnig and ports TCP 2377, TCP and UDP 7946 and UDP 4789 are OPEN"
-            
+        
                repeat=0
-               echo "WARNING: Tried 3 times to connect with ${hosts[$index]}"
                while [ $repeat = 0 ]
                do
                    if [[ "$return_msg" =~ "This node is already part of a swarm" ]]; then
@@ -85,8 +83,8 @@ for((index=0;index<$host_count;++index));do
                    read answer
                    
                    case $answer in
-                       1) echo "Pls Check the port issue and ssh issue with ${hosts[$index]}"
-                          echo "Enter c after fix OR ch for change option"
+                       1) echo "This will resume the deployment from this point"
+                          echo "Enter 'c' to confirm OR 'b' to goback"
                           read continue
 
                           case $continue in
