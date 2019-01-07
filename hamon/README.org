@@ -2,14 +2,18 @@
   - Create ubuntu server machines (One server per each of the 5
     services is recommended, though multiple services can be run on
     same machine. Atleast 4GB of RAM is recommended for running
-    elasticsearch) on any provider(aws, digitalocean, etc..)
+    elasticsearch) on any provider(aws, google, etc..)
   - Open ports TCP 2377, TCP and UDP 7946 and UDP 4789 on all
-    machines. These ports used by docker to communicate between
+    machines. These ports are used by docker to communicate between
     nodes. Make sure that the port '80' and '443'(for https) is open
-    and accepting connections on the machine intended to run
-    'nginx'. (On aws, opening ports can be managed by editing the
-    instance's security group).
-  - Install git and docker on all machines if not already available.
+    and accepting connections on the machine intended to run 'nginx'.
+
+    On aws, opening ports can be managed by editing the instance's
+    security group. See documentation [[https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html#working-with-security-groups][here]].
+
+    On google cloud platform, the necessary firewall rules need to be
+    created and assigned to the instances. See [[https://cloud.google.com/vpc/docs/using-firewalls][here]].
+
   
     docker:
     #+BEGIN_SRC shell-script
