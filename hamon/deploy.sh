@@ -1,6 +1,7 @@
 #!/bin/bash
 source config
-
+LOG_FILE=deploy.log
+echo "Starting deployment" > $$LOG_FILE 
 # Set variables in docker-compose.yml.  This is ssort of a hack. Need
 # to find out why docker stack deploy doesn't substitute env vars
 # properly and fix. If it is not supported, then below method can be
@@ -9,46 +10,48 @@ sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
 sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
-echo "LOG: Nodes are ${nodes[@]}"
+echo "LOG: Nodes are ${nodes[@]}" >> $LOG_FILE 
 
 # Remove duplicate host ips 
 hosts=($(echo "${nodes[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-echo "LOG: Hosts are ${hosts[@]}"
+echo "LOG: Hosts are ${hosts[@]}" >> $LOG_FILE 
 
 labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
 
 sudo docker swarm init --advertise-addr ${NGINX}
 return_code=$?
 if [[ return_code -ne 0 ]];then
-    echo "WARNING: This host is already part of swarm. Please leave,"
-    echo "to leave run the following command on this host, and run bash deploy.sh again"
-    echo "    sudo docker swarm leave -f    "
+    echo "WARNING: This host is already part of swarm. Please leave," | tee -a $LOG_FILE 
+    echo "to leave run the following command on this host, and run bash deploy.sh again" | tee -a $LOG_FILE  
+    echo "    sudo docker swarm leave -f    "  | tee -a $LOG_FILE
+    echo "Stopping deployment" >> $LOG_FILE
     exit 1 
 
-echo "LOG: This host set as swarm master"
+echo "LOG: This host set as swarm master" | tee -a $LOG_FILE 
           
 # label current node as nginx
 sudo docker node update --label-add "nginx=true" $(hostname)
-echo "LOG: Labeled master node  as nginx=true"
+echo "LOG: Labeled master node  as nginx=true">> $LOG_FILE 
 
 # Get the token to join the swarm as worker and construct the joining command
 # This will be run in all the other machines 
 join_token=$(sudo docker swarm join-token --quiet worker)
-join_command="sudo docker swarm join --token $join_token ${NGINX}:2377"
 
 # Add each unique host to swarm
 host_count=${#hosts[@]}
-echo "LOG: ${host_count} hosts to join"
+echo "LOG: ${host_count} hosts to join" >> $LOG_FILE 
 
 for((index=0;index<$host_count;++index));do
     return_code=123
     try_count=1
     while [ $return_code -ne 0 ]
     do
-        echo "LOG: Going to ssh to ${hosts[$index]} and set it as a worker"
+        echo "LOG: Going to ssh to ${hosts[$index]} and set it as a worker" >> $LOG_FILE
+        join_command="sudo docker swarm join --token  $join_token --advertise-addr ${hosts[$index]} ${NGINX}:2377"
+        echo $join_command >> $LOG_FILE
         return_msg=$(ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${hosts[$index]} ${join_command} 2>&1)
         return_code=$?
-	    echo "LOG: Return code is $return_code"
+	    echo "LOG: Return code is $return_code" >> $LOG_FILE 
 
         if [ $return_code -ne 0 ]; then
         
@@ -56,35 +59,35 @@ for((index=0;index<$host_count;++index));do
                while [ $repeat = 0 ]
                do
                    if [[ "$return_msg" =~ "This node is already part of a swarm" ]]; then
-                       echo "${hosts[$index]} is already part of a swarm. Please leave"
-                       echo "the current swarm to use this host.To leave, run the following"
-                       echo "command on that host"
-                       echo "    sudo docker swarm leave -f    "
+                       echo "${hosts[$index]} is already part of a swarm. Please leave" | tee -a $LOG_FILE
+                       echo "the current swarm to use this host.To leave, run the following" | tee -a $LOG_FILE
+                       echo "command on that host" | tee -a $LOG_FILE
+                       echo "    sudo docker swarm leave -f    " | tee -a $LOG_FILE
                    fi
 
                    if [[ "$return_msg" =~ "Timeout was reached before node joined" ]]; then
-                       echo "${hosts[$index]} Cannot communicate with swarm manager ($NGINX).Please"
-                       echo "ensure that $NGINX is configured to allow incomming traffic through "
-                       echo "PORT 2377. Also make sure that ports 7946 and 4789 are also configured properly"
+                       echo "${hosts[$index]} Cannot communicate with swarm manager ($NGINX).Please" | tee -a $LOG_FILE
+                       echo "ensure that $NGINX is configured to allow incomming traffic through " | tee -a $LOG_FILE
+                       echo "PORT 2377. Also make sure that ports 7946 and 4789 are also configured properly" | tee -a $LOG_FILE
                    fi
 
                    if [[ $return_code = 255 ]];then
-                       echo "Cannot ssh to ${hosts[$index]}"
+                       echo "Cannot ssh to ${hosts[$index]}" | tee -a $LOG_FILE
                    fi
                    
-                   echo "====================================================="
-                   echo "Select continue after the problemm is fixed, to continue the deployment or "
-                   echo "select quit to stop the process (Note that selecting 'quit' will rollback the network created by the script)"
+                   echo "=====================================================" | tee -a $LOG_FILE
+                   echo "Select continue after the problemm is fixed, to continue the deployment or " | tee -a $LOG_FILE
+                   echo "select quit to stop the process (Note that selecting 'quit' will rollback the network created by the script)" | tee -a $LOG_FILE
 
-                   echo "1) Problem fixed,  contnue "
-                   echo "2) Quit"
+                   echo "1) Problem fixed,  contnue " | tee -a $LOG_FILE
+                   echo "2) Quit" | tee -a $LOG_FILE
                    
-                   echo -e "Choose 1 or 2 :"
+                   echo -e "Choose 1 or 2 :" | tee -a $LOG_FILE
                    read answer
-                   
+                   echo "Chose $answer"  >> $LOG_FILE
                    case $answer in
-                       1) echo "This will resume the deployment from this point"
-                          echo "Enter 'c' to confirm OR 'b' to goback"
+                       1) echo "This will resume the deployment from this point" | tee -a $LOG_FILE
+                          echo "Enter 'c' to confirm OR 'b' to goback" | tee -a $LOG_FILE
                           read continue
 
                           case $continue in
@@ -93,7 +96,7 @@ for((index=0;index<$host_count;++index));do
                           esac;;
 
                    
-                       2) echo "Going Roll back"
+                       2) echo "Going Roll back"  | tee -a $LOG_FILE
                       
                           # Leave all joined nodes
 	                      leave_command="sudo docker swarm leave -f"
@@ -109,31 +112,33 @@ for((index=0;index<$host_count;++index));do
          fi
     done
     
-    echo "LOG: ${host[$index]} joined to cluster as worker"
+    echo "LOG: ${host[$index]} joined to cluster as worker" | tee -a $LOG_FILE
      
 done
 
 # Label all nodes 
 for((indx=0;indx<4;++indx)); do 
-    echo "LOG: Going to label ${nodes[$indx]} as ${labels[$indx]}"
+    echo "LOG: Going to label ${nodes[$indx]} as ${labels[$indx]}" >> $LOG_FILE 
     
     sudo docker node  update --label-add ${labels[$indx]} $(ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${nodes[$indx]} hostname)
     return_code=$?    
-	echo "LOG: Label Return code is $return_code"
+	echo "LOG: Label Return code is $return_code" >> $LOG_FILE 
 
     if [ $return_code == 0 ]; then
-        echo "LOG: ${node[$indx]} node labeled as ${labels[$indx]}"
+        echo "LOG: ${node[$indx]} node labeled as ${labels[$indx]}" >> $LOG_FILE 
     else
-        echo "LOG: ${node[$indx]} node NOT labeled Successfully"
+        echo "LOG: ${node[$indx]} node NOT labeled Successfully" >> $LOG_FILE 
     fi
 done
 
 # Create shared directory in app host
-echo "LOG: Going to create shared directory in ${SW_APP}"
+echo "LOG: Going to create shared directory in ${SW_APP}" >> $LOG_FILE 
 ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}log ${SHARED_DIR}system ${SHARED_DIR}tmp"
-echo "LOG: Created ${SHARED_DIR} in ${SW_APP} "
+echo "LOG: Created ${SHARED_DIR} in ${SW_APP} " >> $LOG_FILE 
 
 # Deploy
-echo "LOG: Going to DEPLOY........wait a while"
+echo "LOG: Going to DEPLOY........wait a while"  | tee -a $LOG_FILE
 sudo docker stack deploy -c docker-compose.yml story
-echo "LOG: Go to the ${NGINX} with your browser "
+echo "Please wait for some time ......"
+sleep 60
+echo "LOG: Go to the ${NGINX} with your browser "  | tee -a $LOG_FILE 
