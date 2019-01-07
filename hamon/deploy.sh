@@ -13,7 +13,7 @@ sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 ls $SSH_KEY
 return_code=$?
 if [[ $return_code -ne 0 ]];then
-    echo "WARNING: No SSH key present in given path, pls confirm and start deploy again"
+    echo "WARNING: No SSH key present in given path, pls confirm and start deploy again" | tee -a $LOG_FILE  
     exit 1 
 
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
@@ -80,6 +80,11 @@ for((index=0;index<$host_count;++index));do
 
                    if [[ $return_code = 255 ]];then
                        echo "Cannot ssh to ${hosts[$index]}" | tee -a $LOG_FILE
+                   fi
+
+                   if [[ "$return_msg" =~ "docker: command not found" ]]; then
+                       echo "docker not installed in ${hosts[$index]}"| tee -a $LOG_FILE
+                       echo "Pls install docker "| tee -a $LOG_FILE
                    fi
                    
                    echo "=====================================================" | tee -a $LOG_FILE
