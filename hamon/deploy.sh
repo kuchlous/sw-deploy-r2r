@@ -155,7 +155,7 @@ done
 
 # Create shared directory in app host
 echo "LOG: Going to create shared directory in ${SW_APP}" >> $LOG_FILE 
-ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}log ${SHARED_DIR}system ${SHARED_DIR}tmp"
+ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}/log ${SHARED_DIR}/system ${SHARED_DIR}/tmp"
 echo "LOG: Created ${SHARED_DIR} in ${SW_APP} " >> $LOG_FILE 
 
 # Deploy
