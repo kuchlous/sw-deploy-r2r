@@ -20,8 +20,9 @@ fi
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 echo "LOG: Nodes are ${nodes[@]}" >> $LOG_FILE 
 
-# Remove duplicate host ips 
+# Remove duplicate and master host ips 
 hosts=($(echo "${nodes[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+hosts=( "${hosts[@]/$NGINX}" )
 echo "LOG: Hosts are ${hosts[@]}" >> $LOG_FILE 
 
 labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
