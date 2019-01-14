@@ -1,8 +1,8 @@
-USER=ubuntu
-SSH_KEY=/home/abu/hamon/current/storyweaver/suroor-devops.pem
-SHARED_DIR=/home/ubuntu/shared/
-ELASTIC=34.243.187.133
-POSTGRES=34.251.19.45
-SW_APP=34.241.189.237
-COUCH=34.241.189.237
-NGINX=192.168.1.113
+USER=<user>
+SSH_KEY=<path to ssh key>
+SHARED_DIR=<path to shared directory>
+ELASTIC=<ip for elastic>
+POSTGRES=<ip for postgres>
+SW_APP=<ip for sw_app>
+COUCH=<ip for couch>
+NGINX=<ip for nginx>
