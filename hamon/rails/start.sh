@@ -5,6 +5,28 @@ echo "In the new start file- Alok"
 export LC_ALL=C.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
+export NEWRELIC_API_KEY=$NEWRELIC_API_KEY
+export NEWRELIC_NAME=$NEWRELIC_NAME
+export MAILER_USER=$MAILER_USER
+export MAILER_PASSWORD=$MAILER_PASSWORD
+export MAILER_DOMAIN=$MAILER_DOMAIN
+#export RAILS_ENV=production
+export rootUrl=$HOST_IP
+export FACEBOOK_APP_ID=$FACEBOOK_APP_ID
+export FACEBOOK_SECRET_KEY=$FACEBOOK_SECRET_KEY
+export GOOGLE_SIGNIN_APP_ID=$GOOGLE_SIGNIN_APP_ID
+export GOOGLE_SECRET_KEY=$GOOGLE_SECRET_KEY
+export GA_PROPERTY_ID=$GA_PROPERTY_ID
+export GOOGLE_APP_ID=$GOOGLE_TRANSLATE_APP_ID
+export MAILCHIMP_LIST_ID=$MAILCHIMP_LIST_ID
+export MAILCHIMP_API_KEY=$MAILCHIMP_API_KEY
+export DEVISE_SECRET_KEY_BASE=$DEVISE_SECRET_KEY_BASE
+export SECRET_KEY_BASE=$SECRET_KEY_BASE
+export GOOGLE_STORAGE_ACCESS_KEY_ID=$GOOGLE_STORAGE_ACCESS_KEY_ID
+export GOOGLE_STORAGE_SECRET_ACCESS_KEY=$GOOGLE_STORAGE_SECRET_ACCESS_KEY
+export COUCHBASE_IP=$COUCHBASE_IP
+export ELASTICSEARCH_URL=sw-elasticsearch
+export COUCHBASE_IP=sw-couchbase
 
 RAILS_PATH=/workdir/spp
 
@@ -40,19 +62,25 @@ cd $RAILS_PATH
 
 # NEWRELIC_API_KEY=$NEWRELIC_API_KEY NEWRELIC_NAME=$NEWRELIC_NAME MAILER_USER=$MAILER_USER MAILER_PASSWORD=$MAILER_PASSWORD MAILER_DOMAIN=$MAILER_DOMAIN RAILS_ENV=production rootUrl=$HOST_IP RAILS_PORT=8080 FACEBOOK_APP_ID=$FACEBOOK_APP_ID FACEBOOK_SECRET_KEY=$FACEBOOK_SECRET_KEY GOOGLE_SIGNIN_APP_ID=$GOOGLE_SIGNIN_APP_ID GOOGLE_SECRET_KEY=$GOOGLE_SECRET_KEY GA_PROPERTY_ID=$GA_PROPERTY_ID GOOGLE_APP_ID=$GOOGLE_TRANSLATE_APP_ID MAILCHIMP_LIST_ID=$MAILCHIMP_LIST_ID MAILCHIMP_API_KEY=$MAILCHIMP_API_KEY DEVISE_SECRET_KEY_BASE=$DEVISE_SECRET_KEY_BASE SECRET_KEY_BASE=$SECRET_KEY_BASE GOOGLE_STORAGE_ACCESS_KEY_ID=$GOOGLE_STORAGE_ACCESS_KEY_ID GOOGLE_STORAGE_SECRET_ACCESS_KEY=$GOOGLE_STORAGE_SECRET_ACCESS_KEY COUCHBASE_IP=$COUCHBASE_IP ELASTICSEARCH_URL=$ELASTICSEARCH_IP bin/delayed_job  restart
 
-export ELASTICSEARCH_URL=sw-elasticsearch
-export COUCHBASE_IP=sw-couchbase
 echo "db:create"
 bundle exec rake db:create
 echo "db:migrate"
 bundle exec rake db:migrate
+echo " db:seed"
+bundle exec rake db:seed
+# bundle exec rake illustrations:reindex
+# bundle exec rake blog_posts:reindex
+# bundle exec rake users:reindex
+# bundle exec rake stories:reindex
+# bundle exec rake lists:reindex
+bin/delayed_job  restart
+bundle exec puma
+#bundle exec rake swagger:docs
+
 # echo "db:seed"
 # bundle exec rake db:seed
 # echo "db:seed:development"
 # bundle exec rake db:seed:development:users
 # bundle exec rake searchkick:reindex:all
-bundle exec rake jobs:work&
-puma
-
 #tail -f /shared/log/production.log
  
