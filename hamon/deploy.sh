@@ -20,9 +20,17 @@ fi
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 echo "LOG: Nodes are ${nodes[@]}" >> $LOG_FILE 
 
-# Remove duplicate and master host ips 
-hosts=($(echo "${nodes[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-hosts=( "${hosts[@]/$NGINX}" )
+# Remove duplicate host ips 
+unique_hosts=($(echo "${nodes[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+
+# Remove master ip from unique_hosts
+hosts=()
+for value in "${unique_hosts[@]}"
+do
+    [[ $value != $NGINX ]] && hosts+=($value)
+done
+
+
 echo "LOG: Hosts are ${hosts[@]}" >> $LOG_FILE 
 
 labels=("elasticsearch=true" "postgres=true" "app=true" "couchbase=true")
