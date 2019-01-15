@@ -1,7 +1,7 @@
 version: '3'
 services:
   sw-elasticsearch:
-    image: prathambooksdocker/eks17:1
+    image: prathambooksdocker/elasticsearch:latest
     ports:
       - 9200:9200
     environment:
@@ -14,7 +14,7 @@ services:
           - node.labels.elasticsearch == true
 
   sw-postgres:
-    image: prathambooksdocker/pg17:2
+    image: prathambooksdocker/postgres:latest
     ports:
       - 5432:5432
     environment:
@@ -28,7 +28,7 @@ services:
 
 
   sw-couchbase:
-    image: prathambooksdocker/couch17:1
+    image: prathambooksdocker/couchbase:latest
     ports:
       - 8091-8096:8091-8096
     networks:
@@ -40,7 +40,7 @@ services:
 
 
   sw-nginx:
-    image: prathambooksdocker/ng17:1
+    image: prathambooksdocker/nginx:latest
     ports:
       - 80:80
       - 443:443
@@ -57,7 +57,7 @@ services:
 
 
   sw-app:
-    image: prathambooksdocker/railsapp:v0.1.2
+    image: prathambooksdocker/railsapp:latest
     ports:
       - 3000:3000
     volumes:
@@ -78,7 +78,6 @@ services:
         - MAILER_USER=${MAILER_USER}
         - MAILER_PASSWORD=${MAILER_PASSWORD}
         - MAILER_DOMAIN=${MAILER_DOMAIN}
-
     networks:
       - sw-network
     depends_on:
