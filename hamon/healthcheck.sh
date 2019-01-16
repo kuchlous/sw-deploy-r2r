@@ -13,7 +13,7 @@ done
 RETURN_MSG=$(sudo docker exec -t  $CONTAINER_ID service nginx restart)
 
 #check wether have DNS issue if have redeploy the stack
-if [[ "$RETURN_MSG" =~ "host not found in upstream /"sw-app/" in /etc/nginx/sites" ]]; then
+if [[ "$RETURN_MSG" =~ "host not found in upstream" ]]; then
         
     # Remove existing story stack
     echo "Going to remove existing stack" | tee -a $LOG_FILE   
