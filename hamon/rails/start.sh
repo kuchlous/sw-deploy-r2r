@@ -65,9 +65,9 @@ cd $RAILS_PATH
 echo "db:create"
 bundle exec rake db:create
 echo "db:migrate"
-bundle exec rake db:migrate
-echo " db:seed"
-bundle exec rake db:seed
+bundle exec rake db:migrate -t
+echo " db:seed "
+bundle exec rake db:seed -t
 # bundle exec rake illustrations:reindex
 # bundle exec rake blog_posts:reindex
 # bundle exec rake users:reindex
