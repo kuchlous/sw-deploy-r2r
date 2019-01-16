@@ -19,6 +19,8 @@ services:
       - 5432:5432
     environment:
       - HOST=sw-app
+    volumes:
+      - /etc/storyweaver/data/:/var/lib/postgresql/data
     networks:
       - sw-network
     deploy:

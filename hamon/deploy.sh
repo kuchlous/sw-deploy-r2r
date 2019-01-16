@@ -175,6 +175,11 @@ echo "LOG: Going to create shared directory in ${SW_APP}" >> $LOG_FILE
 ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${SW_APP} "mkdir -p ${SHARED_DIR}/log ${SHARED_DIR}/system ${SHARED_DIR}/tmp"
 echo "LOG: Created ${SHARED_DIR} in ${SW_APP} " >> $LOG_FILE 
 
+# Create data directory in postgres
+echo "LOG: Going to create data directory in ${POSTGRES}" >> $LOG_FILE
+ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${USER}@${POSTGRES} "mkdir -p /etc/storyweaver/data"
+echo "LOG: Created /etc/storyweaver/data in ${POSTGRES} " >> $LOG_FILE
+
 # Deploy
 echo "LOG: Going to DEPLOY........wait a while"  | tee -a $LOG_FILE
 sudo docker stack deploy -c docker-compose.yml story
