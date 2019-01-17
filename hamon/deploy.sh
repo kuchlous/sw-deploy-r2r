@@ -34,6 +34,9 @@ if [[ $return_code -ne 0 ]];then
     exit 1 
 fi
 
+#Change mode of ssh key
+chmod 600 $SSH_KEY
+
 nodes=(${ELASTIC} ${POSTGRES} ${SW_APP} ${COUCH})
 echo "LOG: Nodes are ${nodes[@]}" >> $LOG_FILE 
 
