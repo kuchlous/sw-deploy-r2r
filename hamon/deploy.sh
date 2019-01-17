@@ -182,7 +182,7 @@ echo "LOG: Created /etc/storyweaver/data in ${POSTGRES} " >> $LOG_FILE
 
 # Deploy
 echo "LOG: Going to DEPLOY........wait a while"  | tee -a $LOG_FILE
-sudo docker stack deploy -c docker-compose.yml story | tee -a $LOG_FILE 
+sudo docker stack deploy -c docker-compose.yml storyweaver | tee -a $LOG_FILE 
 echo "Please wait for some time ......"
 sleep 180
 
