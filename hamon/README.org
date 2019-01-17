@@ -83,6 +83,10 @@
       NGINX=192.168.1.2
     #+END_SRC
 
+    The other keys are for using third party services. Steps to obtain
+    them are detailed [[https://github.com/kuchlous/sw-deploy-r2r/wiki/Obtaining-api-keys][here]]. If these keys are not set, then those
+    services will be unusable.
+
   - Run
     #+BEGIN_SRC shell-script
       bash deploy.sh
