@@ -5,7 +5,7 @@ LOG_FILE=deploy.log
 
 # Get the container id of nginx
 while [ -z $CONTAINER_ID ]; do
-    CONTAINER_ID=$(sudo docker ps -qf name=story_sw-nginx)
+    CONTAINER_ID=$(sudo docker ps -qf name=storyweaver_sw-nginx)
     echo "LOG: Nginx container id is : $CONTAINER_ID" >> $LOG_FILE 
     sleep 10
 done
@@ -17,9 +17,9 @@ echo "LOG: Return message of nginx service restart is : $RETURN_MSG" | tee -a $L
 #check wether have DNS issue if have redeploy the stack
 if [[ "$RETURN_MSG" =~ "host not found in upstream" ]]; then
         
-    # Remove existing story stack
+    # Remove existing storyweaver stack
     echo "LOG: Going to remove existing stack" | tee -a $LOG_FILE   
-    sudo docker stack rm story | tee -a $LOG_FILE 
+    sudo docker stack rm storyweaver | tee -a $LOG_FILE 
 
     # Wait for a while for remove stack
     echo "LOG: Removing....wait...a..while"
@@ -28,7 +28,7 @@ if [[ "$RETURN_MSG" =~ "host not found in upstream" ]]; then
 
     # Redeploy the stack
     echo "Going to Redeploy" | tee -a $LOG_FILE   
-    sudo docker stack deploy -c docker-compose.yml story | tee -a $LOG_FILE 
+    sudo docker stack deploy -c docker-compose.yml storyweaver | tee -a $LOG_FILE 
     sleep 120
     
 fi
