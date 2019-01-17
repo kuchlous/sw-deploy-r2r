@@ -184,5 +184,4 @@ sleep 180
 # Check the status of the stack and its work
 source  healthcheck.sh
 
-sleep 60
 echo "LOG: Go to the ${NGINX} with your browser "  | tee -a $LOG_FILE 

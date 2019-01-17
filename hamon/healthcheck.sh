@@ -29,6 +29,6 @@ if [[ "$RETURN_MSG" =~ "host not found in upstream" ]]; then
     # Redeploy the stack
     echo "Going to Redeploy" | tee -a $LOG_FILE   
     sudo docker stack deploy -c docker-compose.yml story | tee -a $LOG_FILE 
-    sleep 60
+    sleep 120
     
 fi
