@@ -191,6 +191,6 @@ echo "Please wait for some time ......"
 sleep 180
 
 # Check the status of the stack and its work
-source  healthcheck.sh
+source  dev-healthcheck.sh
 
 echo "LOG: Go to the ${NGINX} with your browser "  | tee -a $LOG_FILE 
