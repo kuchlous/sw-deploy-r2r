@@ -7,6 +7,7 @@ echo "Starting deployment" > $LOG_FILE
 # to find out why docker stack deploy doesn't substitute env vars
 # properly and fix. If it is not supported, then below method can be
 # used.
+sed -i 's@${USER}@'"$USER"'@g' docker-compose.yml
 sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
 sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
 sed -i 's@${FACEBOOK_APP_ID}@'"$FACEBOOK_APP_ID"'@g' docker-compose.yml
