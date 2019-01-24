@@ -91,5 +91,9 @@
     #+BEGIN_SRC shell-script
       bash deploy.sh
     #+END_SRC
+    
+    For the known issue of deployment failure in rare scenario
+    this scripts automatically detects it and does re-deployment 
+
     Wait for sometime and then go to the ip address of nginx server with
-    your browser.
+    your browser after shows messsage `Go to the <ip> with your browser`.
