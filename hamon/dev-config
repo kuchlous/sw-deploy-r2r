@@ -6,7 +6,6 @@ POSTGRES=
 SW_APP=
 COUCH=
 NGINX=
-APP_DIR=
 
 # Third party keys
 # For facebook and google sign-ins.

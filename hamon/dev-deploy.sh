@@ -7,24 +7,24 @@ echo "Starting deployment" > $LOG_FILE
 # to find out why docker stack deploy doesn't substitute env vars
 # properly and fix. If it is not supported, then below method can be
 # used.
-sed -i 's@${USER}@'"$USER"'@g' docker-compose.yml
-sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' docker-compose.yml
-sed -i 's@${NGINX}@'"$NGINX"'@g' docker-compose.yml
-sed -i 's@${FACEBOOK_APP_ID}@'"$FACEBOOK_APP_ID"'@g' docker-compose.yml
-sed -i 's@${FACEBOOK_SECRET_KEY}@'"$FACEBOOK_SECRET_KEY"'@g' docker-compose.yml
-sed -i 's@${GOOGLE_APP_ID}@'"$GOOGLE_APP_ID"'@g' docker-compose.yml
-sed -i 's@${GOOGLE_SECRET_KEY}@'"$GOOGLE_SECRET_KEY"'@g' docker-compose.yml
-sed -i 's@${GA_PROPERTY_ID}@'"$GA_PROPERTY_ID"'@g' docker-compose.yml
-sed -i 's@${GOOGLE_TRANSLATE_APP_ID}@'"$GOOGLE_TRANSLATE_APP_ID"'@g' docker-compose.yml
-sed -i 's@${MAILCHIMP_LIST_ID}@'"$MAILCHIMP_LIST_ID"'@g' docker-compose.yml
-sed -i 's@${MAILCHIMP_API_KEY}@'"$MAILCHIMP_API_KEY"'@g' docker-compose.yml
-sed -i 's@${GOOGLE_STORAGE_ACCESS_KEY_ID}@'"$GOOGLE_STORAGE_ACCESS_KEY_ID"'@g' docker-compose.yml
-sed -i 's@${GOOGLE_STORAGE_SECRET_ACCESS_KEY}@'"$GOOGLE_STORAGE_SECRET_ACCESS_KEY"'@g' docker-compose.yml
-sed -i 's@${NEWRELIC_API_KEY}@'"$NEWRELIC_API_KEY"'@g' docker-compose.yml
-sed -i 's@${NEWRELIC_NAME}@'"$NEWRELIC_NAME"'@g' docker-compose.yml
-sed -i 's@${MAILER_USER}@'"$MAILER_USER"'@g' docker-compose.yml
-sed -i 's@${MAILER_PASSWORD}@'"$MAILER_PASSWORD"'@g' docker-compose.yml
-sed -i 's@${MAILER_DOMAIN}@'"$MAILER_DOMAIN"'@g' docker-compose.yml
+sed -i 's@${USER}@'"$USER"'@g' dev-compose.yml
+sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' dev-compose.yml
+sed -i 's@${NGINX}@'"$NGINX"'@g' dev-compose.yml
+sed -i 's@${FACEBOOK_APP_ID}@'"$FACEBOOK_APP_ID"'@g' dev-compose.yml
+sed -i 's@${FACEBOOK_SECRET_KEY}@'"$FACEBOOK_SECRET_KEY"'@g' dev-compose.yml
+sed -i 's@${GOOGLE_APP_ID}@'"$GOOGLE_APP_ID"'@g' dev-compose.yml
+sed -i 's@${GOOGLE_SECRET_KEY}@'"$GOOGLE_SECRET_KEY"'@g' dev-compose.yml
+sed -i 's@${GA_PROPERTY_ID}@'"$GA_PROPERTY_ID"'@g' dev-compose.yml
+sed -i 's@${GOOGLE_TRANSLATE_APP_ID}@'"$GOOGLE_TRANSLATE_APP_ID"'@g' dev-compose.yml
+sed -i 's@${MAILCHIMP_LIST_ID}@'"$MAILCHIMP_LIST_ID"'@g' dev-compose.yml
+sed -i 's@${MAILCHIMP_API_KEY}@'"$MAILCHIMP_API_KEY"'@g' dev-compose.yml
+sed -i 's@${GOOGLE_STORAGE_ACCESS_KEY_ID}@'"$GOOGLE_STORAGE_ACCESS_KEY_ID"'@g' dev-compose.yml
+sed -i 's@${GOOGLE_STORAGE_SECRET_ACCESS_KEY}@'"$GOOGLE_STORAGE_SECRET_ACCESS_KEY"'@g' dev-compose.yml
+sed -i 's@${NEWRELIC_API_KEY}@'"$NEWRELIC_API_KEY"'@g' dev-compose.yml
+sed -i 's@${NEWRELIC_NAME}@'"$NEWRELIC_NAME"'@g' dev-compose.yml
+sed -i 's@${MAILER_USER}@'"$MAILER_USER"'@g' dev-compose.yml
+sed -i 's@${MAILER_PASSWORD}@'"$MAILER_PASSWORD"'@g' dev-compose.yml
+sed -i 's@${MAILER_DOMAIN}@'"$MAILER_DOMAIN"'@g' dev-compose.yml
 
 
 # Check whether the key is present in given path
