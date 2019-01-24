@@ -91,9 +91,13 @@
     #+BEGIN_SRC shell-script
       bash deploy.sh
     #+END_SRC
-    
-    For the known issue of deployment failure in rare scenario
-    this scripts automatically detects it and does re-deployment 
 
-    Wait for sometime and then go to the ip address of nginx server with
-    your browser after shows messsage `Go to the <ip> with your browser`.
+    Wait for sometime and then go to the ip address of nginx server
+    with your browser.
+    
+*** Known issue
+    In very rare cases just after deployment, containers can have
+    problems connecting to each other due to internal DNS resolution
+    issues with docker swarm.  To mitigate this, we check for the
+    issue after deployment and if it has happened, the containers are
+    redeployed.
