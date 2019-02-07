@@ -64,7 +64,7 @@ services:
       - 3000:3000
     volumes:
       - ${SHARED_DIR}:/shared
-      - /home/${USER}/workdir:/workdir
+      - ${WORKDIR}:/workdir
     environment:
         - FACEBOOK_APP_ID=${FACEBOOK_APP_ID}
         - FACEBOOK_SECRET_KEY=${FACEBOOK_SECRET_KEY}

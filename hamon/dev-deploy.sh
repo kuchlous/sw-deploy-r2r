@@ -9,6 +9,7 @@ echo "Starting deployment" > $LOG_FILE
 # used.
 sed -i 's@${USER}@'"$USER"'@g' dev-compose.yml
 sed -i 's@${SHARED_DIR}@'"$SHARED_DIR"'@g' dev-compose.yml
+sed -i 's@${WORKDIR}@'"$WORKDIR"'@g' dev-compose.yml
 sed -i 's@${NGINX}@'"$NGINX"'@g' dev-compose.yml
 sed -i 's@${FACEBOOK_APP_ID}@'"$FACEBOOK_APP_ID"'@g' dev-compose.yml
 sed -i 's@${FACEBOOK_SECRET_KEY}@'"$FACEBOOK_SECRET_KEY"'@g' dev-compose.yml
