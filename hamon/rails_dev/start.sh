@@ -2,11 +2,15 @@ RAILS_PATH=spp
 
 cd $RAILS_PATH
 
+RETURN_CODE=1
+while [ $RETURN_CODE -ne 0 ]
+do
 source /etc/profile.d/rvm.sh && export LC_ALL=C.UTF-8 &&\
      export LANG=en_US.UTF-8 &&\
      export LANGUAGE=en_US.UTF-8 &&\
      bundle install
-
+RETURN_CODE=$?
+done
 
 sleep 15
 source /etc/profile.d/rvm.sh
